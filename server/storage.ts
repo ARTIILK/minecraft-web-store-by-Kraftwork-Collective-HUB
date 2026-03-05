@@ -1,37 +1,96 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { type SiteConfig, type Category, type Product } from "@shared/schema";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getSiteConfig(): Promise<SiteConfig>;
+  getCategories(): Promise<Category[]>;
+  getProducts(): Promise<Product[]>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private siteConfig: SiteConfig = {
+    serverName: "ExampleMC",
+    serverIP: "play.examplemc.com",
+    logo: "/assets/logo.png",
+    discord: "https://discord.gg/example",
+    currency: ["INR", "USD"],
+    defaultCurrency: "INR",
+    theme: {
+      primary: "#6c5ce7",
+      secondary: "#1e1e2f",
+      accent: "#a29bfe",
+      background: "#0f0f1a",
+    },
+    backgroundAnimation: {
+      enabled: true,
+      type: "floatingParticles",
+      density: 80,
+      speed: 0.4,
+    },
+  };
 
-  constructor() {
-    this.users = new Map();
+  private categories: Category[] = [
+    {
+      id: "ranks",
+      name: "Ranks",
+      description: "Purchase powerful server ranks",
+      bannerImage: "/assets/ranks.png",
+      enabled: true,
+    },
+    {
+      id: "coins",
+      name: "Coins",
+      description: "Buy coins for the server",
+      bannerImage: "/assets/coins.png",
+      enabled: true,
+    },
+  ];
+
+  private products: Product[] = [
+    {
+      id: "vip_rank",
+      name: "VIP Rank",
+      categoryId: "ranks",
+      priceINR: 299,
+      priceUSD: 4.99,
+      description: "Unlock VIP perks on the server",
+      image: "/assets/vip.png",
+      featured: true,
+      checkoutURL: "https://checkout.tebex.io/example",
+    },
+    {
+      id: "mvp_rank",
+      name: "MVP Rank",
+      categoryId: "ranks",
+      priceINR: 599,
+      priceUSD: 9.99,
+      description: "Unlock MVP perks on the server",
+      image: "/assets/mvp.png",
+      featured: true,
+      checkoutURL: "https://checkout.tebex.io/example",
+    },
+    {
+      id: "1000_coins",
+      name: "1000 Coins",
+      categoryId: "coins",
+      priceINR: 99,
+      priceUSD: 1.99,
+      description: "Get 1000 in-game coins",
+      image: "/assets/coins.png",
+      featured: false,
+      checkoutURL: "https://checkout.tebex.io/example",
+    },
+  ];
+
+  async getSiteConfig(): Promise<SiteConfig> {
+    return this.siteConfig;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async getCategories(): Promise<Category[]> {
+    return this.categories;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async getProducts(): Promise<Product[]> {
+    return this.products;
   }
 }
 
