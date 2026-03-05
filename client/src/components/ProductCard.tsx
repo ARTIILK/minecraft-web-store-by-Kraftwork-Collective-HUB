@@ -10,7 +10,7 @@ import {
   DialogTitle, 
   DialogDescription 
 } from "@/components/ui/dialog";
-import { ExternalLink, Sparkles, Package } from "lucide-react";
+import { ExternalLink, Sparkles, Package, ChevronRight, Copy, Check } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
@@ -29,62 +29,63 @@ export function ProductCard({ product, index }: ProductCardProps) {
   return (
     <>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.02 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
+        transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
         onClick={() => setIsModalOpen(true)}
-        className="group relative bg-card rounded-2xl border border-white/5 overflow-hidden hover-card-fx cursor-pointer flex flex-col h-full"
+        className="group relative bg-card/40 backdrop-blur-md rounded-[2rem] border border-white/5 overflow-hidden hover-card-fx glow-border cursor-pointer flex flex-col h-full"
       >
         {/* Featured Badge */}
         {product.featured && (
-          <div className="absolute top-4 right-4 z-20">
-            <div className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center shadow-[0_0_15px_rgba(var(--primary),0.5)]">
-              <Sparkles className="w-3 h-3 mr-1" />
-              POPULAR
+          <div className="absolute top-6 right-6 z-20">
+            <div className="bg-primary/20 backdrop-blur-md text-primary text-[10px] tracking-[0.2em] font-black px-4 py-2 rounded-full flex items-center border border-primary/30 uppercase">
+              <Sparkles className="w-3 h-3 mr-2" />
+              Featured
             </div>
           </div>
         )}
 
         {/* Image Container */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/40 flex items-center justify-center p-6">
-          <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent z-10" />
+        <div className="relative aspect-square w-full overflow-hidden flex items-center justify-center p-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-card/80 z-10" />
           
           {hasImage ? (
              <img 
               src={product.image} 
               alt={product.name}
-              className="w-full h-full object-contain relative z-0 group-hover:scale-110 transition-transform duration-700 ease-out drop-shadow-2xl"
+              className="w-full h-full object-contain relative z-0 group-hover:scale-110 transition-transform duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = 'https://ui-avatars.com/api/?name=' + product.name + '&background=random&size=256';
               }}
             />
           ) : (
-            <Package className="w-20 h-20 text-muted-foreground/30 group-hover:scale-110 transition-transform duration-700 z-0" />
+            <Package className="w-24 h-24 text-primary/20 group-hover:scale-110 transition-transform duration-1000 z-0" />
           )}
         </div>
 
         {/* Content */}
-        <div className="p-6 flex flex-col flex-grow z-20 -mt-6">
-          <h3 className="font-display font-bold text-xl text-white mb-2 group-hover:text-primary transition-colors line-clamp-1">
+        <div className="p-8 pt-0 flex flex-col flex-grow z-20">
+          <h3 className="font-display font-black text-2xl text-white mb-2 group-hover:text-primary transition-colors tracking-tight">
             {product.name}
           </h3>
-          <p className="text-muted-foreground text-sm line-clamp-2 mb-6 flex-grow">
+          <p className="text-muted-foreground/80 text-sm line-clamp-2 mb-8 flex-grow leading-relaxed font-medium">
             {product.description || "No description provided."}
           </p>
           
-          <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+          <div className="flex items-center justify-between mt-auto">
             <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Price</span>
-              <span className="font-display font-bold text-2xl text-white flex items-baseline">
-                <span className="text-primary text-lg mr-1">{currencySymbol}</span>
+              <span className="text-[10px] text-primary font-black uppercase tracking-[0.2em] mb-1">Starting from</span>
+              <span className="font-display font-black text-3xl text-white flex items-baseline tracking-tighter">
+                <span className="text-primary text-xl mr-1 opacity-80">{currencySymbol}</span>
                 {price.toLocaleString()}
               </span>
             </div>
             
-            <Button variant="secondary" className="rounded-xl font-bold bg-white/5 hover:bg-primary hover:text-white transition-all duration-300">
-              Details
-            </Button>
+            <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all duration-500">
+              <ChevronRight className="w-6 h-6" />
+            </div>
           </div>
         </div>
       </motion.div>

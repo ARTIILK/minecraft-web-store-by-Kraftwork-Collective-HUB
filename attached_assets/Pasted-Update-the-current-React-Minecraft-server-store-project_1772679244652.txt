@@ -1,0 +1,143 @@
+Update the current React Minecraft server store project with the following design guideline changes.
+
+The website must remain a modern Minecraft server store frontend driven by JSON configuration files, but the UI must be **mostly original**.
+
+Use the following website only as **minor inspiration (maximum 25%)**:
+
+Reference:
+http://woodmc.vercel.app/
+
+Important rule:
+
+The final design must **NOT look like a clone** of the reference website.
+Use it only to understand general layout ideas for a Minecraft store.
+
+The final design must feel unique and modern.
+
+DESIGN REQUIREMENTS
+
+Create a new visual identity for the store.
+
+Avoid copying:
+
+layout structure
+color palette
+card styles
+animations
+section spacing
+
+Instead create a **distinct style** with:
+
+soft glassmorphism cards
+dark futuristic Minecraft theme
+glow accents using theme colors
+smooth hover effects
+minimal but premium UI
+
+The homepage layout should be redesigned with this structure:
+
+Hero Section
+Large hero with server logo
+server IP display with copy button
+animated background (Three.js)
+
+Featured Items Section
+display featured products in large cards
+hover animation
+glow border effect
+
+Categories Section
+grid layout
+each category card contains:
+
+banner image
+title
+short description
+
+Community Section
+Discord join button
+server IP copy
+
+Footer
+links
+server info
+copyright
+
+THREE.JS BACKGROUND
+
+Keep the Three.js animation but make it slightly more advanced:
+
+floating particles or cubes
+slow parallax mouse interaction
+glow effects
+low GPU usage
+
+Animation must still be configurable through site.json.
+
+PRODUCT CARD REDESIGN
+
+Redesign product cards so they look different from the reference site.
+
+Product card style should include:
+
+large item image
+product name
+price
+hover scale animation
+buy button
+
+Use a **glowing gradient border effect** when hovering.
+
+CATEGORY PAGE
+
+Create a clean grid layout:
+
+3 columns desktop
+2 columns tablet
+1 column mobile
+
+Use smooth transitions between category pages.
+
+CURRENCY SYSTEM
+
+Keep INR and USD switching.
+
+When currency changes:
+
+all product prices update instantly.
+
+MODAL PRODUCT VIEW
+
+When clicking a product:
+
+open modal showing:
+
+large product image
+full description
+price
+BUY button
+
+BUY button opens Tebex checkout link in new tab.
+
+PERFORMANCE REQUIREMENTS
+
+Site must run smoothly on low-end devices.
+
+Optimize by:
+
+lazy loading images
+limiting Three.js particle count
+avoiding heavy animations
+keeping bundle size small
+
+FINAL GOAL
+
+The final website should be:
+
+modern
+unique
+Minecraft themed
+JSON driven
+fast and mobile friendly
+
+It should **not visually resemble woodmc.vercel.app**, but can take small inspiration for store functionality.

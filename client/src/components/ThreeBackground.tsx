@@ -29,59 +29,46 @@ export function ThreeBackground() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Create Particles
-    const geometry = new THREE.BufferGeometry();
-    const particlesCount = density * 2;
-    const posArray = new Float32Array(particlesCount * 3);
-    const scaleArray = new Float32Array(particlesCount);
-
-    for(let i = 0; i < particlesCount * 3; i+=3) {
-      // Spread particles widely
-      posArray[i] = (Math.random() - 0.5) * 100;     // x
-      posArray[i+1] = (Math.random() - 0.5) * 100;   // y
-      posArray[i+2] = (Math.random() - 0.5) * 50;    // z
-      scaleArray[i/3] = Math.random();
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    geometry.setAttribute('aScale', new THREE.BufferAttribute(scaleArray, 1));
-
-    // Custom Shader Material for glowing dots
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 0 },
-        color: { value: new THREE.Color(config?.theme?.primary || '#8b5cf6') }
-      },
-      vertexShader: `
-        uniform float time;
-        attribute float aScale;
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          vec3 pos = position;
-          pos.y += sin(time * 0.5 + pos.x) * aScale * 2.0;
-          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          gl_PointSize = (10.0 * aScale) * (30.0 / -mvPosition.z);
-          gl_Position = projectionMatrix * mvPosition;
-        }
-      `,
-      fragmentShader: `
-        uniform vec3 color;
-        void main() {
-          float strength = distance(gl_PointCoord, vec2(0.5));
-          strength = 1.0 - strength;
-          strength = pow(strength, 3.0);
-          if(strength < 0.1) discard;
-          gl_FragColor = vec4(color, strength * 0.8);
-        }
-      `,
+    // Create Particles/Cubes
+    const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+    const particlesCount = density;
+    const material = new THREE.MeshPhongMaterial({
+      color: config?.theme?.primary || '#8b5cf6',
       transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false
+      opacity: 0.6,
+      shininess: 100,
     });
 
-    const particlesMesh = new THREE.Points(geometry, material);
-    scene.add(particlesMesh);
+    const instancedMesh = new THREE.InstancedMesh(geometry, material, particlesCount);
+    const dummy = new THREE.Object3D();
+
+    for (let i = 0; i < particlesCount; i++) {
+      dummy.position.set(
+        (Math.random() - 0.5) * 60,
+        (Math.random() - 0.5) * 60,
+        (Math.random() - 0.5) * 40
+      );
+      dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+      dummy.updateMatrix();
+      instancedMesh.setMatrixAt(i, dummy.matrix);
+    }
+    scene.add(instancedMesh);
+
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    const pointLight = new THREE.PointLight(config?.theme?.primary || '#8b5cf6', 2);
+    pointLight.position.set(10, 10, 10);
+    scene.add(pointLight);
+
+    // Mouse Parallax
+    let mouseX = 0;
+    let mouseY = 0;
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    window.addEventListener('mousemove', handleMouseMove);
 
     // Animation Loop
     const clock = new THREE.Clock();
@@ -89,10 +76,14 @@ export function ThreeBackground() {
 
     const animate = () => {
       const elapsedTime = clock.getElapsedTime() * speedMultiplier;
-      material.uniforms.time.value = elapsedTime;
       
-      particlesMesh.rotation.y = elapsedTime * 0.05;
-      particlesMesh.rotation.x = elapsedTime * 0.02;
+      instancedMesh.rotation.y = elapsedTime * 0.05;
+      instancedMesh.rotation.x = elapsedTime * 0.03;
+
+      // Parallax
+      camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
+      camera.position.y += (-mouseY * 5 - camera.position.y) * 0.05;
+      camera.lookAt(scene.position);
 
       renderer.render(scene, camera);
       animationFrameId = requestAnimationFrame(animate);
@@ -110,6 +101,7 @@ export function ThreeBackground() {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
       cancelAnimationFrame(animationFrameId);
       geometry.dispose();
       material.dispose();
