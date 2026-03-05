@@ -1,22 +1,14 @@
 {
     "version": 2,
     "functions": {
-        "dist/index.js": {
-            "maxDuration": 10
+        "api/index.js": {
+            "includeFiles": "api/**"
         }
     },
-    "routes": [
-        {
-            "src": "/api/(.*)",
-            "dest": "dist/index.js"
-        },
-        {
-            "src": "/assets/(.*)",
-            "dest": "dist/public/assets/$1"
-        },
+    "rewrites": [
         {
             "src": "/(.*)",
-            "dest": "dist/index.js"
+            "dest": "/api/index.js"
         }
     ]
 }

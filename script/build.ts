@@ -33,7 +33,7 @@ const allowlist = [
 ];
 
 async function buildAll() {
-  await rm("dist", { recursive: true, force: true });
+  await rm("api", { recursive: true, force: true });
 
   console.log("building client...");
   await viteBuild();
@@ -51,7 +51,7 @@ async function buildAll() {
     platform: "node",
     bundle: true,
     format: "esm",
-    outfile: "dist/index.js",
+    outfile: "api/index.js",
     define: {
       "process.env.NODE_ENV": '"production"',
     },
@@ -62,7 +62,7 @@ async function buildAll() {
 
   console.log("copying data.json...");
   const fs = await import("fs/promises");
-  await fs.copyFile("server/data.json", "dist/data.json");
+  await fs.copyFile("server/data.json", "api/data.json");
 }
 
 buildAll().catch((err) => {
