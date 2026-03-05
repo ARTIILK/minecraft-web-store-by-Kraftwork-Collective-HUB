@@ -1,0 +1,287 @@
+Create a modern **React frontend web store for a Minecraft server** inspired by the layout and design of the following reference websites:
+
+Reference UI inspiration:
+https://store.firemc.fun
+https://store.applemc.fun
+
+The goal is to build a **fully configurable Minecraft server store frontend** where the entire website (theme, categories, items, visibility, images, etc.) can be controlled through **JSON configuration files**.
+
+The backend checkout and payment system will **NOT be implemented in this project** because it will later be connected to Tebex. Each product will simply redirect users to a Tebex checkout link.
+
+The application must be **fast, responsive, mobile friendly, and optimized for low-end devices**.
+
+Technology stack:
+
+React with Vite
+Tailwind CSS for styling
+Three.js for background animation
+Component-based architecture
+JSON-driven configuration system
+
+The store should look modern and similar to large Minecraft store websites while remaining lightweight.
+
+Project structure example:
+
+/src
+/components
+/pages
+/config
+/theme
+/utils
+/three
+
+/config/site.json
+/config/categories.json
+/config/products.json
+
+CONFIGURATION SYSTEM
+
+The entire site must be configurable via JSON.
+
+site.json controls:
+
+serverName
+serverIP
+logoURL
+discordLink
+theme colors
+currency options
+background animation settings
+
+Example:
+
+{
+"serverName": "ExampleMC",
+"serverIP": "play.examplemc.com",
+"logo": "/assets/logo.png",
+"discord": "https://discord.gg/example",
+"currency": ["INR","USD"],
+"defaultCurrency": "INR",
+"theme": {
+"primary": "#6c5ce7",
+"secondary": "#1e1e2f",
+"accent": "#a29bfe",
+"background": "#0f0f1a"
+},
+"backgroundAnimation": {
+"enabled": true,
+"type": "floatingParticles",
+"density": 80,
+"speed": 0.4
+}
+}
+
+CATEGORIES SYSTEM
+
+categories.json controls store categories.
+
+Fields:
+
+id
+name
+description
+bannerImage
+enabled
+
+Example:
+
+{
+"categories":[
+{
+"id":"ranks",
+"name":"Ranks",
+"description":"Purchase powerful server ranks",
+"bannerImage":"/assets/ranks.png",
+"enabled":true
+},
+{
+"id":"coins",
+"name":"Coins",
+"description":"Buy coins for the server",
+"bannerImage":"/assets/coins.png",
+"enabled":true
+}
+]
+}
+
+PRODUCT SYSTEM
+
+products.json defines all store items.
+
+Fields:
+
+id
+name
+categoryId
+priceINR
+priceUSD
+description
+image
+featured
+checkoutURL
+
+Example:
+
+{
+"products":[
+{
+"id":"vip_rank",
+"name":"VIP Rank",
+"categoryId":"ranks",
+"priceINR":299,
+"priceUSD":4.99,
+"description":"Unlock VIP perks on the server",
+"image":"/assets/vip.png",
+"featured":true,
+"checkoutURL":"https://checkout.tebex.io/example"
+}
+]
+}
+
+PAGES REQUIRED
+
+Homepage
+
+Hero section with server logo
+Featured items section
+Categories preview
+Animated background
+
+Category page
+
+Displays all items in selected category
+Responsive product grid
+
+Product modal
+
+Clicking a product opens modal showing:
+
+image
+description
+price
+checkout button
+
+Checkout system
+
+Clicking BUY redirects to:
+
+product.checkoutURL
+
+No payment processing logic needed.
+
+CURRENCY SYSTEM
+
+Allow users to toggle between:
+
+INR
+USD
+
+Prices must dynamically switch using JSON values.
+
+NAVIGATION
+
+Navbar must contain:
+
+Logo
+Home
+Categories dropdown
+Currency selector
+
+FOOTER
+
+Include:
+
+Server IP with copy button
+Discord link
+Copyright text
+
+THREE.JS BACKGROUND ANIMATION
+
+Implement a lightweight **Three.js animated background canvas**.
+
+This animation should appear behind the entire site and must not block UI interaction.
+
+Requirements:
+
+Use a full-screen canvas positioned behind the content
+Smooth animation with requestAnimationFrame
+Use simple geometry for performance
+
+Possible animation style:
+
+floating glowing particles or cubes
+slow movement
+parallax mouse interaction
+
+Animation features:
+
+particles slowly floating in 3D space
+subtle glow effect
+particles slightly react to mouse movement
+
+Performance optimization:
+
+limit particle count
+pause animation when tab inactive
+reduce animation on mobile devices
+
+Component structure:
+
+/three/BackgroundAnimation.jsx
+
+This component must:
+
+initialize Three.js scene
+create particles
+animate them
+resize canvas dynamically
+
+BACKGROUND SETTINGS FROM JSON
+
+The animation must read settings from site.json:
+
+enabled
+type
+density
+speed
+
+If backgroundAnimation.enabled is false, the animation should not load.
+
+UI DESIGN GUIDELINES
+
+Modern Minecraft store style
+Smooth hover animations
+Rounded cards
+Gradient highlights
+Minimal heavy animations
+Responsive layout for desktop and mobile
+
+COMPONENTS TO CREATE
+
+Navbar
+HeroBanner
+CategoryCard
+ProductCard
+ProductModal
+Footer
+CurrencySwitcher
+BackgroundAnimation (Three.js)
+
+PERFORMANCE REQUIREMENTS
+
+Lazy load images
+Use optimized assets
+Keep animations lightweight
+Avoid unnecessary re-renders
+
+FINAL RESULT
+
+A fully working **React frontend Minecraft server store template** where:
+
+Everything is controlled via JSON files
+Categories and products can be enabled or disabled
+Theme colors and logo can be changed easily
+Products redirect to Tebex checkout
+Three.js animated background enhances visuals without reducing performance
+
+The code must be clean, modular, and easy to extend later.
