@@ -40,7 +40,7 @@
         {
             "id": "kits",
             "name": "Kits",
-            "description": "Buy lits for the server",
+            "description": "Buy kits for the server",
             "bannerImage": "/assets/kits.png",
             "enabled": true
         }
@@ -76,6 +76,28 @@
             "priceUSD": 1.99,
             "description": "Get 1000 in-game coins",
             "image": "/assets/coins.png",
+            "featured": false,
+            "checkoutURL": "https://checkout.tebex.io/example"
+        },
+        {
+            "id": "starter_kit",
+            "name": "Starter Kit",
+            "categoryId": "kits",
+            "priceINR": 199,
+            "priceUSD": 2.49,
+            "description": "A perfect start for your journey with basic gear.",
+            "image": "/assets/kits.png",
+            "featured": true,
+            "checkoutURL": "https://checkout.tebex.io/example"
+        },
+        {
+            "id": "pro_kit",
+            "name": "Pro Kit",
+            "categoryId": "kits",
+            "priceINR": 499,
+            "priceUSD": 5.99,
+            "description": "Advanced gear for serious players.",
+            "image": "/assets/kits.png",
             "featured": false,
             "checkoutURL": "https://checkout.tebex.io/example"
         }
