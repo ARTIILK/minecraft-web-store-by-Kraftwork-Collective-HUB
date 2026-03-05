@@ -1,0 +1,99 @@
+Fix the TailwindCSS build error in the React + Vite + Express project.
+
+Current error:
+
+The class `ease-[cubic-bezier(0.23,1,0.32,1)]` is causing a PostCSS error when used inside `@apply`.
+
+File:
+client/src/index.css
+
+Current code:
+
+.hover-card-fx {
+@apply transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)];
+}
+
+This does not work because TailwindCSS does not allow arbitrary values like `ease-[...]` inside `@apply`.
+
+TASKS
+
+1. Fix the CSS correctly.
+
+Replace the easing part with standard CSS while keeping Tailwind utilities.
+
+Correct implementation:
+
+.hover-card-fx {
+@apply transition-all duration-700;
+transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+This keeps Tailwind utilities but moves the custom easing into normal CSS.
+
+2. Ensure the class is placed inside a Tailwind layer.
+
+Update the CSS structure:
+
+@layer utilities {
+.hover-card-fx {
+@apply transition-all duration-700;
+transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+}
+
+3. Scan the entire project for any other invalid `ease-[...]` usage inside `@apply` and fix them the same way.
+
+4. Confirm that the project compiles successfully with:
+
+npm run dev
+
+without PostCSS or Tailwind warnings.
+
+5. Improve maintainability by creating a dedicated README.md file in the root of the project.
+
+The README must include:
+
+Project Title
+Description of the Minecraft Store Frontend
+Tech stack (React, Vite, TailwindCSS, Three.js, Express)
+
+Project Structure
+
+/client
+/server
+/config
+/components
+/three
+
+Configuration System
+
+Explain the JSON driven system:
+
+site.json
+categories.json
+products.json
+
+Development instructions
+
+npm install
+npm run dev
+
+Explain that Express runs the API and Vite runs the frontend.
+
+Features section
+
+JSON configurable store
+Three.js animated background
+currency switcher (INR / USD)
+dynamic product catalog
+Tebex checkout integration
+
+Deployment instructions
+
+How to deploy the frontend to Vercel or Netlify.
+
+6. Keep the README clean and well formatted using Markdown headings.
+
+FINAL GOAL
+
+The project should build successfully without Tailwind errors, the custom easing should still work visually, and the repository must include a clear README explaining the architecture and configuration system.

@@ -76,7 +76,8 @@
   }
 
   .hover-card-fx {
-    @apply transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)];
+    @apply transition-all duration-700;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
   }
   
   .hover-card-fx:hover {
